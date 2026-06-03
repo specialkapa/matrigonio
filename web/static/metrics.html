@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matrigonio · metrics</title>
+<link rel="icon" type="image/x-icon" href="/static/assets/just-married.ico">
+<script type="module" src="/static/js/datastar.js"></script>
+<style>
+  @font-face {
+    font-family: "DepartureMono";
+    src: url("/static/fonts/DepartureMonoNerdFont-Regular.otf") format("opentype");
+    font-display: swap;
+  }
+  :root {
+    --bg: #0b0e14;
+    --panel: #131722;
+    --line: #1f2633;
+    --ink: #e6e9ef;
+    --muted: #7e8aa0;
+    --sys: #5ad1c8;
+    --heap: #c79bff;
+    --peak: #ff8a5c;
+    --ok: #5ad17a;
+    --warn: #ffd45c;
+    --danger: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "DepartureMono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding: 24px;
+    max-width: 920px;
+  }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: 1px; }
+  h1 .dim { color: var(--muted); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .card .value { font-size: 26px; margin-top: 6px; }
+  .card .unit { font-size: 13px; color: var(--muted); margin-left: 3px; }
+  .card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .card.accent-sys .value { color: var(--sys); }
+  .card.accent-heap .value { color: var(--heap); }
+  .card.accent-peak .value { color: var(--peak); }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 12px; font-weight: normal; }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-top: 10px; flex-wrap: wrap; }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .legend .l-sys::before { background: var(--sys); }
+  .legend .l-heap::before { background: var(--heap); }
+  .legend .l-peak::before { background: var(--peak); }
+  .chart { width: 100%; height: 220px; display: block; }
+
+  .bar-wrap { background: #0a0d13; border: 1px solid var(--line); border-radius: 8px; height: 28px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; transition: width .4s ease, background .4s ease; }
+  .bar-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .bar-caption { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .placeholder { color: var(--muted); padding: 40px 0; text-align: center; }
+  footer { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center; }
+  code { color: var(--ink); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>matrigonio <span class="dim">// metrics</span></h1>
+  </header>
+
+  <!-- This wrapper is never morphed, so its interval trigger survives every
+       update. .leading fires immediately, then every 2s it asks the server for
+       a fresh #metrics fragment, which Datastar morphs in below. -->
+  <div data-on-interval__duration.2s.leading="@get('/api/metrics-fragment')">
+    <div id="metrics">
+      <p class="placeholder">connecting…</p>
+    </div>
+  </div>
+
+  <footer>live-morphed by Datastar from <code>/api/metrics-fragment</code> every 2s · numbers reset when the instance restarts (incl. free-tier cold start)</footer>
+</body>
+</html>

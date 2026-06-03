@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sync/atomic"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/specialkapa/matrigonio/internal/controllers"
@@ -36,11 +37,14 @@ func main() {
 	c := server.APIConfig{
 		AppName:      "Matrigonio",
 		Platform:     os.Getenv("PLATFORM"),
-		StaticDir:    staticDir,
 		Templates:    template.Must(template.ParseGlob("./internal/templates/*")),
 		HomePageHits: atomic.Int32{},
 		Guests:       guests,
 	}
+	// Record peak memory in the background so /api/metrics can report the
+	// worst case seen, not just the instant of the request.
+	c.StartMemorySampler(2 * time.Second)
+
 	mc := controllers.MetricsController{&c}
 	hc := controllers.HomeController{&c}
 	menuC := controllers.MenuController{&c}
@@ -48,9 +52,13 @@ func main() {
 	mux := http.NewServeMux()
 	fileServer := http.FileServer(http.Dir(staticDir))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
+	mux.HandleFunc("GET /metrics", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, staticDir+"metrics.html")
+	})
 	mux.Handle("/app/", c.MiddlewareCountFirstHomeVisit(http.HandlerFunc(hc.HandlerHome)))
 	mux.HandleFunc("GET /api/checkhealth", controllers.HandlerCheckHealth)
 	mux.HandleFunc("GET /api/metrics", mc.HandlerMetrics)
+	mux.HandleFunc("GET /api/metrics-fragment", mc.HandlerMetricsFragment)
 	mux.HandleFunc("POST /api/reset", mc.HandlerReset)
 	mux.HandleFunc("POST /api/reset-home-cookie", mc.HandlerResetHomeCookie)
 	mux.HandleFunc("POST /api/menu-lookup", menuC.HandlerMenuLookup)

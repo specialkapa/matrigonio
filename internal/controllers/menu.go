@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"html"
 	"net/http"
 	"strings"
 
+	"github.com/starfederation/datastar-go/datastar"
 	"github.com/specialkapa/matrigonio/internal/server"
 )
 
@@ -26,8 +26,11 @@ type menuLookupRequest struct {
 }
 
 func (c *MenuController) HandlerMenuLookup(w http.ResponseWriter, r *http.Request) {
+	// ReadSignals pulls Datastar's signals regardless of transport (JSON body
+	// for @post, datastar= query param for @get), so this isn't coupled to the
+	// request method the way a manual body decode would be.
 	var req menuLookupRequest
-	_ = json.NewDecoder(r.Body).Decode(&req)
+	_ = datastar.ReadSignals(r, &req)
 	query := strings.TrimSpace(req.GuestName)
 
 	var inner string
@@ -51,7 +54,14 @@ func (c *MenuController) HandlerMenuLookup(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	writePatchElements(w, `<div id="menu-result" class="menu-result">`+inner+`</div>`)
+	// useViewTransition lets the browser cross-fade/slide the result as it
+	// changes (e.g. cycling through "did you mean?" guesses). Datastar falls back
+	// to an instant swap where View Transitions aren't supported.
+	sse := datastar.NewSSE(w, r)
+	_ = sse.PatchElements(
+		`<div id="menu-result" class="menu-result">`+inner+`</div>`,
+		datastar.WithUseViewTransitions(true),
+	)
 }
 
 func renderGuest(g server.Guest) string {
@@ -117,16 +127,4 @@ func renderSuggestion(query string, suggestions []server.Guest, idx int) string 
 
 func renderNotFound(query string) string {
 	return fmt.Sprintf(`<p class="menu-result-msg">We couldn't find &ldquo;%s&rdquo;. Double-check the spelling, or get in touch and we'll sort it out.</p>`, html.EscapeString(query))
-}
-
-func writePatchElements(w http.ResponseWriter, elements string) {
-	w.Header().Set("Content-Type", "text/event-stream")
-	w.Header().Set("Cache-Control", "no-cache")
-	// useViewTransition lets the browser cross-fade/slide the result as it
-	// changes (e.g. cycling through "did you mean?" guesses). Datastar falls
-	// back to an instant swap where View Transitions aren't supported.
-	fmt.Fprintf(w, "event: datastar-patch-elements\ndata: useViewTransition true\ndata: elements %s\n\n", elements)
-	if f, ok := w.(http.Flusher); ok {
-		f.Flush()
-	}
 }
