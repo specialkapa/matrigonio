@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/starfederation/datastar-go/datastar"
 	"github.com/specialkapa/matrigonio/internal/server"
+	"github.com/starfederation/datastar-go/datastar"
 )
 
 type MenuController struct {
@@ -38,7 +38,7 @@ func (c *MenuController) HandlerMenuLookup(w http.ResponseWriter, r *http.Reques
 	case query == "":
 		inner = `<p class="menu-result-msg">Type your first name above to see your choices.</p>`
 	case c.Guests == nil:
-		inner = `<p class="menu-result-msg">The guest list isn't available right now — please try again later.</p>`
+		inner = `<p class="menu-result-msg">The guest list isn't available right now. Please try again later.</p>`
 	default:
 		guest, suggestions, found := c.Guests.Lookup(query)
 		switch {
@@ -74,7 +74,7 @@ func renderGuest(g server.Guest) string {
 		return b.String()
 	}
 
-	fmt.Fprintf(&b, `<p class="menu-result-name">%s, here's what you chose:</p><ul class="info-list">`, name)
+	fmt.Fprintf(&b, `<p class="menu-result-name">Hi %s! See what you'll be having below.</p><ul class="info-list">`, name)
 	b.WriteString(courseRow("starter", g.Starter))
 	b.WriteString(courseRow("intermediate", g.Intermediate))
 	b.WriteString(courseRow("main", g.Main))

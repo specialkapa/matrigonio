@@ -88,14 +88,7 @@
             </svg>
           </span>
         </button>
-
-        <span
-          class="title-svg"
-          aria-hidden="true"
-          style="--icon: url(&quot;/static/assets/wedding-couple.svg&quot;)"
-        ></span>
-
-        <span class="app-brand-name">K+I</span>
+        <span class="app-brand-name">K  I</span>
       </div>
     </header>
 
@@ -123,6 +116,15 @@
         >
           venue
         </button>
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'transport'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'transport'; $menuOpen = false"
+        >
+          transport
+        </button>
+
         <button
           type="button"
           class="menu-panel-link"
@@ -159,7 +161,7 @@
         <span class="title-text">Kostas  Isabella</span>
       </h1>
       <p class="welcome-tagline">
-        Welcome to our wedding website, we can't wait to celebrate with all of you! We're getting
+        Welcome to our wedding website, we can't wait to celebrate with all of you! 
       </p>
     </section>
 
@@ -177,7 +179,8 @@
           <h3>Thursday 23rd July</h3>
           <p>
             We will be signing the papers in a tiny ceremony just with close family and witnesses.
-            <br><br>In the evening we will look to organise drinks in a local pub in Leith (TBC).
+            <br /><br />In the evening we will look to organise drinks in a local pub in Leith
+            (TBC).
           </p>
         </div>
 
@@ -188,13 +191,25 @@
 
         <div class="info-block">
           <h3>Saturday 25th July</h3>
-            <b>Dinner-party</b>: Please arrive at “Cafe Party” in Jupiter Artland by 17:30 for
-            drinks, we will then have dinner and will need to leave at around 23:00. We are not
-            planning speeches/cake cutting, more of a casual dinner party.<br><br>
-            <b>Late-night party</b>: Since we cannot stay too late at Jupiter Artland and we
-            cannot dance there, we will find a club or bar to finish off the night. Plans are TBC
-            (waiting for line-ups to be published).
-        <!-- </div> -->
+          <b>Dinner-party</b>: Please arrive at “Cafe Party” in Jupiter Artland by 17:30 for drinks,
+          we will then have dinner and will need to leave at around 23:00. We are not planning
+          speeches/cake cutting, more of a casual dinner party.
+          <br />
+          <aside class="info-callout">
+            <span class="info-callout-label">note</span>
+            <p>
+              Head to the
+              <button type="button" class="info-link" data-on:click="$activeSection = 'venue'">
+                venue page
+              </button>
+              for further details on Jupiter Artland.
+            </p>
+          </aside>
+          <br />
+          <b>Late-night party</b>: Since we cannot stay too late at Jupiter Artland and we cannot
+          dance there, we will find a club or bar to finish off the night. Plans are TBC (waiting
+          for line-ups to be published).
+        </div>
       </div>
     </section>
 
@@ -202,7 +217,9 @@
     <section data-show="$activeSection === 'venue'" class="info-section">
       <div class="info-card">
         <h2 class="info-title">venue</h2>
-        <p class="info-lead">Where the celebration happens.</p>
+        <p class="info-lead">
+          We will be having our dinner-party at the “Cafe Party” in Jupiter Artland.
+        </p>
 
         <div class="info-block">
           <h3>Jupiter Artland</h3>
@@ -232,87 +249,90 @@
           <aside class="info-callout">
             <span class="info-callout-label">note</span>
             <p>
-              The whole of Jupiter Artland is open to you free of charge for the entire day. Just
-              mention Kostas and Isabella's wedding celebrations at the entrance — your name will be
-              on the guest list. Dinner and the celebration itself will be held in the
+              The gardens are open from 10am and we really recommend you come earlier to explore.<br /><br />
+              There’s hidden sculptures, art
               <a
                 class="info-link"
-                href="https://www.jupiterartland.org/eat-at-jupiter-artland/cafe-party/"
+                href="https://www.jupiterartland.org/all-art/current/"
                 target="_blank"
                 rel="noopener"
+                >exhibitions</a
               >
-                Café Party.
-              </a>
+              and even swimming sessions bookable (in advance!) both in the
+              <a
+                class="info-link"
+                href="https://www.jupiterartland.org/sessions/wild-swimming-sunday/"
+                target="_blank"
+                rel="noopener"
+                >Cells of life</a
+              >
+              and the
+              <a
+                class="info-link"
+                href="https://www.jupiterartland.org/sessions/gateway-pool-swimming/"
+                target="_blank"
+                rel="noopener"
+                >Gateway</a
+              >. You will be able to enter the grounds for free given we have our celebration
+              (further details TBC). More or less it takes 2 hours to visit all of the grounds.
+              <br /><br />
+              Once our dinner party starts you won’t be able to roam around the gardens
+              unfortunately.
             </p>
           </aside>
         </div>
+      </div>
+    </section>
+
+    <!-- TRANSPORT -->
+    <section data-show="$activeSection === 'transport'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">transport</h2>
+        <p class="info-lead">Jupiter is only 25 minutes from the centre of Edinburgh.</p>
 
         <div class="info-block">
-          <h3>explore the grounds</h3>
+          <h3>by bus</h3>
           <p>
-            The grounds are yours to explore — come early and take your time among the sculptures,
-            woodland and water. Here's a map of the estate to help you find your way.
+            The number
+            <a
+              class="info-link"
+              href="https://www.lothianbuses.com/timetable/?service_name=X27"
+              target="_blank"
+              rel="noopener"
+              >x27 Lothian Country bus</a
+            >
+            service runs between Edinburgh and the venue. The closest stop is at the main entrance
+            and is called East Calder, Coxydene (Jupiter Artland). The last bus on a Saturday from
+            the Coxydene bus stop to Edinburgh is at 23:36. <br/>
+          <aside class="info-callout">
+            <span class="info-callout-label">note</span>
+            <p>The bus schedule might change by the 25th of July so please check yourself closer to the date.</p>
+          </aside>
+
           </p>
-          <a
-            href="/static/assets/venue-map.jpg"
-            target="_blank"
-            rel="noopener"
-            class="info-map-link"
-          >
-            <img
-              class="info-map"
-              src="/static/assets/venue-map.jpg"
-              alt="Map of the Jupiter Artland grounds"
-              loading="lazy"
-            />
-          </a>
-          <p class="info-meta">Tap the map to open it full size.</p>
+        </div>
+
+        <div class="info-block">
+          <h3>by taxi</h3>
+          <p>
+            The best taxi company to use for this area is
+            <a class="info-link" href="https://444444.scot/" target="_blank" rel="noopener"
+              >AlltheFours</a
+            >. They have 4 and 8 person taxis, so if you plan on using one, we recommend you buddy
+            up. We have been in touch with the company to let them know about our wedding party, and
+            they are happy to help, but they <b>would appreciate some advance notice</b>. They are
+            very helpful and responsive via email.
+          </p>
         </div>
 
         <div class="info-block">
           <h3>by car</h3>
-          <p>
-            [Free / paid] parking is available [on site / at [nearby car park]]. Plug [address or
-            postcode] into your sat-nav.
-          </p>
+          <p>If you plan to drive, there is a free car park.</p>
+          <aside class="info-callout">
+            <span class="info-callout-label">note</span>
+            <p>If you are bringing a van/camper, the max height is 3.3 metres (there's a gated entrance).</p>
+          </aside>
         </div>
-
-        <div class="info-block">
-          <h3>by public transport</h3>
-          <p>
-            The nearest [station / stop] is [name], about [x] minutes away on foot. From there [walk
-            / taxi / bus [number]].
-          </p>
-        </div>
-
-        <div class="info-block">
-          <h3>taxis &amp; rideshare</h3>
-          <p>
-            [Taxi company + number] serve the area, and [Uber / Bolt] runs here too. Ask the driver
-            for [venue name], [street].
-          </p>
-        </div>
-
-        <div class="info-block">
-          <h3>good to know</h3>
-          <p>
-            [Accessibility notes, whether it's indoors/outdoors, what to wear on your feet for the
-            [garden / cobbles], and anything else worth a heads-up.]
-          </p>
-        </div>
-
-        <div class="info-block">
-          <h3>the nightly spots</h3>
-          <p>
-            The casual evenings happen elsewhere — see
-            <button type="button" class="info-link" data-on:click="$activeSection = 'schedule'">
-              schedule
-            </button>
-            for each night's location.
-          </p>
-        </div>
-
-        <p class="info-note">Lost on the day? Call [name] on [phone].</p>
       </div>
     </section>
 
@@ -320,7 +340,7 @@
     <section data-show="$activeSection === 'menu'" class="info-section">
       <div class="info-card">
         <h2 class="info-title">menu</h2>
-        <p class="info-lead">What's on the table</p>
+        <p class="info-lead">What's on the table!</p>
 
         <div class="info-block info-lookup">
           <h3>your selection</h3>
@@ -468,14 +488,13 @@
           Dress code? You know us, we don’t have any expectations at all!! As long as you are
           clothed!!
         </p>
-          <aside class="info-callout">
-            <span class="info-callout-label">tip</span>
-            <p>
-              It’s very normal to experience thunderstorms and sunshine at the same time. 
-              So please be prepared for the weird and wonderful Scottish bad-weather experience.
-            </p>
-          </aside>
-        </div>
+        <aside class="info-callout">
+          <span class="info-callout-label">tip</span>
+          <p>
+            It’s very normal to experience thunderstorms and sunshine at the same time. So please be
+            prepared for the weird and wonderful Scottish bad-weather experience.
+          </p>
+        </aside>
       </div>
     </section>
 
