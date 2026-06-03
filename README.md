@@ -1,12 +1,12 @@
 sections to add
 
-- [ ] welcome message in home screen
-- [ ] automatically toggle side panel on load (with delay post appearance of the welcome message)
-- [ ] schedule
+- [x] welcome message in home screen
+- [x] automatically toggle side panel on load (with delay post appearance of the welcome message)
+- [x] schedule
 - [ ] transport
-- [ ] menu/orders/drinks
+- [x] menu/orders/drinks
 - [ ] location
-- [ ] dress code
-- [ ] casual meetups on the rest of the days
+- [x] dress code
+- [x] casual meetups on the rest of the days
 - [ ] post even schedule
 - [ ] photo uploads (with QR code)
