@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ .title }}</title>
+
+    <script type="module" src="/static/js/datastar.js"></script>
+    <script src="/static/js/starfield.js"></script>
+
+    <link rel="stylesheet" href="/static/css/root.css" />
+    <link rel="icon" type="image/x-icon" href="/static/assets/just-married.ico" />
+  </head>
+
+  <body
+    data-signals="{
+        menuOpen: false,
+        avatarMenuOpen: false,
+        avatarHover: false,
+        displayWelcomeSection: true,
+        activeSection: '',
+        guestName: '',
+        suggestIndex: 0,
+        confirm: false,
+        showMenu: false,
+        key: '',
+        starSpeed: 20,
+        starCount: 4000,
+        sunZ: 2000
+    }"
+    data-init="
+        const t0 = performance.now();
+        const from = 20, to = 2, dur = 10000;
+        const tick = () => {
+            const p = Math.min((performance.now() - t0) / dur, 1);
+            $starSpeed = from + (to - from) * p;
+            if (p < 1) requestAnimationFrame(tick);
+        };
+        tick();
+    "
+    data-on:keydown__window="
+        if ($displayWelcomeSection) return;
+        $key = evt.key === 'Backspace' ? 'Backspace'
+             : (evt.key.length === 1 ? evt.key : '');
+        $key.length > 0 && @post('/keystroke', {requestCancellation: 'disabled'});
+    "
+  >
+    <star-field
+      id="main-starfield"
+      class="fullscreen"
+      data-attr:speed="$starSpeed"
+      data-attr:star-count="$starCount"
+      data-attr:sun-z="$sunZ"
+    ></star-field>
+
+    <header class="app-header">
+      <div class="app-brand">
+        <button
+          type="button"
+          class="cta"
+          data-on:click="$menuOpen = !$menuOpen"
+          data-class:is-open="$menuOpen"
+        >
+          <span data-text="$menuOpen ? 'CLOSE' : 'MENU'"></span>
+          <span class="cta-arrow">
+            <svg
+              width="66px"
+              height="43px"
+              viewBox="0 0 66 43"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <path
+                  class="one"
+                  d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
+                ></path>
+                <path
+                  class="two"
+                  d="M20.1553933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
+                ></path>
+                <path
+                  class="three"
+                  d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
+                ></path>
+              </g>
+            </svg>
+          </span>
+        </button>
+
+        <span
+          class="title-svg"
+          aria-hidden="true"
+          style="--icon: url(&quot;/static/assets/wedding-couple.svg&quot;)"
+        ></span>
+
+        <span class="app-brand-name">K+I</span>
+      </div>
+    </header>
+
+    <aside
+      class="menu-panel"
+      id="menu-panel"
+      data-class:is-open="$menuOpen"
+      data-attr:aria-hidden="!$menuOpen"
+      data-attr:inert="!$menuOpen"
+    >
+      <nav class="menu-panel-nav">
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'schedule'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'schedule'; $menuOpen = false"
+        >
+          schedule
+        </button>
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'venue'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'venue'; $menuOpen = false"
+        >
+          venue
+        </button>
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'menu'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'menu'; $menuOpen = false"
+        >
+          menu
+        </button>
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'dresscode'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'dresscode'; $menuOpen = false"
+        >
+          dress code
+        </button>
+        <button
+          type="button"
+          class="menu-panel-link"
+          data-class:is-active="$activeSection === 'gifts'"
+          data-on:click="$displayWelcomeSection = false; $activeSection = 'gifts'; $menuOpen = false"
+        >
+          gifts
+        </button>
+      </nav>
+    </aside>
+
+    <section
+      data-show="$displayWelcomeSection"
+      data-class:is-hidden="$menuOpen"
+      class="welcome-center"
+    >
+      <h1>
+        <span class="title-text">Kostas  Isabella</span>
+      </h1>
+      <p class="welcome-tagline">
+        Welcome to our wedding website, we can't wait to celebrate with all of you! We're getting
+      </p>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section data-show="$activeSection === 'schedule'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">schedule</h2>
+        <p class="info-lead">
+          You may wish to make your own plans in Edinburgh, but we will also be around to catch up
+          before the wedding dinner party. Please get in touch with us if you wish to join these
+          earlier days.
+        </p>
+
+        <div class="info-block">
+          <h3>Thursday 23rd July</h3>
+          <p>
+            We will be signing the papers in a tiny ceremony just with close family and witnesses.
+            <br><br>In the evening we will look to organise drinks in a local pub in Leith (TBC).
+          </p>
+        </div>
+
+        <div class="info-block">
+          <h3>Friday 24th July</h3>
+          <p>We will be around to enjoy the day/evening with anyone (TBC).</p>
+        </div>
+
+        <div class="info-block">
+          <h3>Saturday 25th July</h3>
+            <b>Dinner-party</b>: Please arrive at “Cafe Party” in Jupiter Artland by 17:30 for
+            drinks, we will then have dinner and will need to leave at around 23:00. We are not
+            planning speeches/cake cutting, more of a casual dinner party.<br><br>
+            <b>Late-night party</b>: Since we cannot stay too late at Jupiter Artland and we
+            cannot dance there, we will find a club or bar to finish off the night. Plans are TBC
+            (waiting for line-ups to be published).
+        <!-- </div> -->
+      </div>
+    </section>
+
+    <!-- VENUE -->
+    <section data-show="$activeSection === 'venue'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">venue</h2>
+        <p class="info-lead">Where the celebration happens.</p>
+
+        <div class="info-block">
+          <h3>Jupiter Artland</h3>
+          <p class="info-meta">
+            <a
+              class="info-link"
+              href="https://www.google.co.uk/maps/place/Caf%C3%A9+Party/@55.9063766,-3.4248568,17z/data=!4m14!1m7!3m6!1s0x4887db453f939839:0x92c0c5dac16413bd!2sJupiter+Artland!8m2!3d55.9009238!4d-3.4213178!16s%2Fg%2F11cn3vvt8n!3m5!1s0x4887dba7d342aed7:0x3d43a574b29e1b01!8m2!3d55.9069388!4d-3.4243881!16s%2Fg%2F11mts6ds4q?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener"
+            >
+              󰗵 The Steadings, Bonnington House, Wilkieston, Edinburgh EH28 8BY
+            </a>
+          </p>
+          <p>
+            Jupiter Artland is a contemporary sculpture garden located just outside Edinburgh. For
+            more information about the venue visit
+            <a
+              class="info-link"
+              href="https://www.jupiterartland.org/learning/about-us/"
+              target="_blank"
+              rel="noopener"
+            >
+              their website.
+            </a>
+          </p>
+
+          <aside class="info-callout">
+            <span class="info-callout-label">note</span>
+            <p>
+              The whole of Jupiter Artland is open to you free of charge for the entire day. Just
+              mention Kostas and Isabella's wedding celebrations at the entrance — your name will be
+              on the guest list. Dinner and the celebration itself will be held in the
+              <a
+                class="info-link"
+                href="https://www.jupiterartland.org/eat-at-jupiter-artland/cafe-party/"
+                target="_blank"
+                rel="noopener"
+              >
+                Café Party.
+              </a>
+            </p>
+          </aside>
+        </div>
+
+        <div class="info-block">
+          <h3>explore the grounds</h3>
+          <p>
+            The grounds are yours to explore — come early and take your time among the sculptures,
+            woodland and water. Here's a map of the estate to help you find your way.
+          </p>
+          <a
+            href="/static/assets/venue-map.jpg"
+            target="_blank"
+            rel="noopener"
+            class="info-map-link"
+          >
+            <img
+              class="info-map"
+              src="/static/assets/venue-map.jpg"
+              alt="Map of the Jupiter Artland grounds"
+              loading="lazy"
+            />
+          </a>
+          <p class="info-meta">Tap the map to open it full size.</p>
+        </div>
+
+        <div class="info-block">
+          <h3>by car</h3>
+          <p>
+            [Free / paid] parking is available [on site / at [nearby car park]]. Plug [address or
+            postcode] into your sat-nav.
+          </p>
+        </div>
+
+        <div class="info-block">
+          <h3>by public transport</h3>
+          <p>
+            The nearest [station / stop] is [name], about [x] minutes away on foot. From there [walk
+            / taxi / bus [number]].
+          </p>
+        </div>
+
+        <div class="info-block">
+          <h3>taxis &amp; rideshare</h3>
+          <p>
+            [Taxi company + number] serve the area, and [Uber / Bolt] runs here too. Ask the driver
+            for [venue name], [street].
+          </p>
+        </div>
+
+        <div class="info-block">
+          <h3>good to know</h3>
+          <p>
+            [Accessibility notes, whether it's indoors/outdoors, what to wear on your feet for the
+            [garden / cobbles], and anything else worth a heads-up.]
+          </p>
+        </div>
+
+        <div class="info-block">
+          <h3>the nightly spots</h3>
+          <p>
+            The casual evenings happen elsewhere — see
+            <button type="button" class="info-link" data-on:click="$activeSection = 'schedule'">
+              schedule
+            </button>
+            for each night's location.
+          </p>
+        </div>
+
+        <p class="info-note">Lost on the day? Call [name] on [phone].</p>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section data-show="$activeSection === 'menu'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">menu</h2>
+        <p class="info-lead">What's on the table</p>
+
+        <div class="info-block info-lookup">
+          <h3>your selection</h3>
+          <p>Forgotten what you picked? Type your first name to see your choices.</p>
+          <div class="lookup-field">
+            <input
+              class="lookup-input"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="your first name…"
+              aria-label="your first name"
+              data-bind:guestName
+              data-on:keydown="if (evt.key === 'Enter') { $suggestIndex = 0; $confirm = false; @post('/api/menu-lookup'); }"
+            />
+            <button
+              type="button"
+              class="cta lookup-btn"
+              data-on:click="$suggestIndex = 0; $confirm = false; @post('/api/menu-lookup')"
+            >
+              find
+            </button>
+          </div>
+          <!-- Static wrapper: the "did you mean?" yes/no buttons are injected
+               into #menu-result via SSE, so we delegate their clicks to this
+               always-present element instead of relying on datastar re-binding
+               handlers on morphed-in children. -->
+          <div
+            class="menu-result-wrap"
+            data-on:click="
+                const b = evt.target.closest('[data-action]');
+                if (!b) return;
+                if (b.dataset.action === 'confirm') { $confirm = true; }
+                else { $confirm = false; $suggestIndex = Number(b.dataset.next); }
+                @post('/api/menu-lookup');
+            "
+          >
+            <div id="menu-result" class="menu-result"></div>
+          </div>
+        </div>
+
+        <div class="info-block menu-reveal">
+          <button
+            type="button"
+            class="menu-reveal-btn"
+            data-on:click="$showMenu = !$showMenu"
+            data-attr:aria-expanded="$showMenu"
+          >
+            <span data-text="$showMenu ? 'hide the full menu' : 'see the full menu'"></span>
+            <span class="menu-reveal-icon" data-class:is-open="$showMenu" aria-hidden="true"
+              >▾</span
+            >
+          </button>
+        </div>
+
+        <div class="menu-full" data-show="$showMenu">
+          <div class="info-block">
+            <h3>starter</h3>
+            <ul class="info-list">
+              <li>Crayfish &amp; red pepper ravioli with cucumber spaghetti and caviar consommé</li>
+              <li>
+                Heather marinated venison carpaccio, truffle aioli, soft boiled quails' eggs,
+                piccalilli and frisée lettuce <em>(gf)</em>
+              </li>
+              <li>
+                Potted kiln roasted salmon and brown shrimp with crème fraîche, pickled cucumber,
+                and oaties <em>(gf)</em>
+              </li>
+              <li>Pan seared Barra scallops, saffron risotto and oyster leaf <em>(gf)</em></li>
+              <li>Asparagus mosaic, tomato fondue and baby leaf salad <em>(gf, vg)</em></li>
+            </ul>
+          </div>
+
+          <div class="info-block">
+            <h3>intermediate</h3>
+            <ul class="info-list">
+              <li>Vodka Sorbet</li>
+              <li>Lemon Sorbet</li>
+            </ul>
+          </div>
+
+          <div class="info-block">
+            <h3>main</h3>
+            <ul class="info-list">
+              <li>
+                Traditional wellington of Scotch Beef with herby potato purée, honey glazed heritage
+                carrots and beer gravy
+              </li>
+              <li>
+                Seared fillet of Turbot, braised baby vegetables, slow cooked ox tail, red wine jus
+                split with a chive oil <em>(gf)</em>
+              </li>
+              <li>
+                6oz fillet steak with a butter braised potato fondant, grilled heritage cherry
+                tomatoes, shallot and bone marrow bordelaise sauce <em>(gf)</em>
+              </li>
+              <li>
+                Yellow and green courgette cannelloni with pumpkin and pumpkin seed cream, baby herb
+                salad <em>(gf, v)</em>
+              </li>
+              <li>
+                Loin of lamb, black pudding, thyme and truffle pommes anna, lamb, apple, apple cider
+                sticky jus <em>(gf)</em>
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-block">
+            <h3>dessert</h3>
+            <ul class="info-list">
+              <li>
+                Chocolate bomb, globe of chocolate filled with white chocolate cheese cake, dark
+                chocolate ganache, popping candy and salted caramel sauce
+              </li>
+              <li>
+                Black forest slice, layers of dark chocolate sponge, black cherries and salted dark
+                chocolate sauce
+              </li>
+              <li>Tonka bean crème brulée, black pepper short bread</li>
+              <li>
+                Steamed toffee &amp; Medjool date sponge, vanilla bean caramel sauce and vanilla ice
+                cream
+              </li>
+              <li>
+                Dark chocolate with pistachio mousse, toasted pistachios and crispy string pastry
+                <em>(gf)</em>
+              </li>
+            </ul>
+          </div>
+
+          <p class="info-note">
+            <strong>gf</strong> gluten free · <strong>v</strong> vegetarian · <strong>vg</strong>
+            vegan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DRESS CODE -->
+    <section data-show="$activeSection === 'dresscode'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">dress code</h2>
+        <p class="info-lead">
+          Dress code? You know us, we don’t have any expectations at all!! As long as you are
+          clothed!!
+        </p>
+          <aside class="info-callout">
+            <span class="info-callout-label">tip</span>
+            <p>
+              It’s very normal to experience thunderstorms and sunshine at the same time. 
+              So please be prepared for the weird and wonderful Scottish bad-weather experience.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- GIFTS -->
+    <section data-show="$activeSection === 'gifts'" class="info-section">
+      <div class="info-card">
+        <h2 class="info-title">gifts</h2>
+        <p class="info-lead">
+          Your presence is the gift for us (really!), we appreciate you coming in the middle of
+          summer, some of you from quite far away, some of you by train all the way from the middle
+          of Europe!! We have also been living together for the past 3 years so we don’t really NEED
+          anything. However, if you do want to contribute to our honeymoon (we will be going to the
+          Kintyre peninsula) then our bank details are below. And if you prefer to give a physical
+          gift then go for it!!
+        </p>
+
+        <div class="info-block">
+          <h3>bank details</h3>
+          <ul class="info-list">
+            <li><strong>bank</strong>: Monzo</li>
+            <li><strong>account holder</strong>: Konstantinos Papazafeiropoulos</li>
+            <li><strong>sort code</strong>: 04-00-04</li>
+            <li><strong>account number</strong>: 51219345</li>
+            <li><strong>IBAN</strong>: GB38MONZ04000451219345</li>
+            <li><strong>BIC/SWIFT</strong>: MONZGB2L</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section id="target-text"></section>
+  </body>
+</html>

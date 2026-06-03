@@ -1,0 +1,12 @@
+# Render Blueprint: deploys Matrigonio as a Docker web service.
+# In Render: New > Blueprint, point at this repo, and it picks this up.
+services:
+  - type: web
+    name: matrigonio
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/checkhealth
+    envVars:
+      - key: PLATFORM
+        value: prod
